@@ -1,1 +1,0 @@
-Future project for an MLP that classifies movies by genre.

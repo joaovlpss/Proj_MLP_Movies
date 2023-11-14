@@ -34,8 +34,14 @@ def extract_frames(video_path, output_folder, num_parts=12, frames_per_part=20):
 
     # Extract frames
     for part in range(num_parts):
+        # Calculate the start and end frame for each part
+        start_frame = int(total_frames * part / num_parts)
+        end_frame = int(total_frames * (part + 1) / num_parts) - 1
+        end_frame = min(end_frame, total_frames - 1)  # Ensure not to exceed total frames
+
         for frame_num in range(frames_per_part):
-            frame_id = int((part * part_duration * fps) + (frame_num * frames_interval * fps))
+            # Calculate frame index within the part
+            frame_id = start_frame + int(frame_num * (end_frame - start_frame) / frames_per_part)
 
             # Set video to the correct frame
             cap.set(cv2.CAP_PROP_POS_FRAMES, frame_id)
@@ -49,7 +55,7 @@ def extract_frames(video_path, output_folder, num_parts=12, frames_per_part=20):
             frame_filename = f"{output_folder}/frame_part{part}_num{frame_num}.jpg"
             cv2.imwrite(frame_filename, frame)
             print(f"Saved {frame_filename}")
-
+    
     # Release the video capture object
     cap.release()
     print("Extraction complete.")
