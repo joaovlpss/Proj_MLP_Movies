@@ -1,0 +1,7 @@
+# Movie files
+*.mkv
+*.mp4
+
+# Movie frames
+*.jpg
+*.png
