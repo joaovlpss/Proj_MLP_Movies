@@ -5,3 +5,6 @@
 # Movie frames
 *.jpg
 *.png
+
+# Histograms, Haralick features and final combined features.
+*.npy
