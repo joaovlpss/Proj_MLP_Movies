@@ -10,7 +10,7 @@ The project is organized into several directories, each serving a specific purpo
   - `frames/`: Contains extracted frames for each movie, organized in subfolders by movie names (e.g., `scream`)
   - `movies/`: Holds all movie files in formats like .mkv, .mp4, etc.
 - `extraction_tools/`: Hosts tools for frame extraction and preprocessing
-- `models/`: Will host the model trainer and related scripts
+- `models/`: Hosts the model trainer and related scripts
 - `outputs/`: For storing all trained models
 - `src/`
   - `visualization_tools/`: Will contain tools for visualizing frame information, data, and MLP training progress
