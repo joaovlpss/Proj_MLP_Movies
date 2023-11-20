@@ -1,6 +1,8 @@
 # Movie files
 *.mkv
 *.mp4
+*.avi
+
 
 # Movie frames
 *.jpg
