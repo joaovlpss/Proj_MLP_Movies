@@ -40,16 +40,10 @@ def preprocess_movie_frames(movie_name, input_folder, output_folder):
 def main():
     # Main project directory
     project_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-    
-    # Get movie name
-    movie_name = input("Enter the movie name for preprocessing frames: ")
-
-    # Input and output folders
-    input_folder = os.path.join(project_dir, 'data/frames')
-    output_folder = os.path.join(project_dir, 'data/preprocessed_frames')
-
-    # Preprocess frames
-    preprocess_movie_frames(movie_name, input_folder, output_folder)
+    for x in os.scandir(os.path.join(project_dir, 'data/frames')):
+        if x.is_dir():
+            print(f"Processing {x.name}...")
+            preprocess_movie_frames(x.name, os.path.join(project_dir, 'data/frames'), os.path.join(project_dir, 'data/preprocessed_frames'))
 
 if __name__ == "__main__":
     main()

@@ -51,5 +51,17 @@ def process_movie(movie_name):
         np.save(hist_file, np.hstack([hist_h, hist_s, hist_v]))
         np.save(haralick_file, haralick_features)
 
-# Process the movie 'scream'
-process_movie('scream')
+def main():
+    # Main project directory
+    project_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
+    for x in os.scandir(os.path.join(project_dir, 'data/preprocessed_frames')):
+        if x.is_dir():
+            print(f"Processing {x.name}...")
+            process_movie(x.name)
+
+
+
+
+
+if __name__ == "__main__":
+    main()

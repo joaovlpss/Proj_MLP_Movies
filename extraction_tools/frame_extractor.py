@@ -67,48 +67,36 @@ def main():
     # Main project directory
     project_dir = os.path.join(script_dir, '..')
 
-    # Get movie name
-    movie_name = input("Choose movie to be extracted (without extension): ")
-
-    # Get extension
-    extension = input("Choose extension (mp4, avi, etc): ")
-
-    # Path to the video file
-    video_path = os.path.join(project_dir, f"data/movies/{movie_name}.{extension}")
-
-    # Check if the video file exists
-    if not os.path.exists(video_path):
-        print(f"Error: The file {video_path} does not exist.")
-        return
-
-    # Check if the file is a valid video file
-    try:
-        cap = cv2.VideoCapture(video_path)
-        if not cap.isOpened():
-            print(f"Error: The file {video_path} is not a valid video file or the format is not supported.")
-            return
-        cap.release()
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return
-
-    # Folder where extracted frames will be saved
-    output_folder = os.path.join(project_dir, f"data/frames/{movie_name}")
-
-    # Create the output folder if it doesn't exist
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
     # Number of parts to divide the video into
     num_parts = 12
 
     # Number of frames to extract from each part
     frames_per_part = 20
 
-    # Extract frames
-    extract_frames(video_path, output_folder, num_parts, frames_per_part)
+    for file in os.listdir(os.path.join(project_dir, 'data/movies')):
+        if file.endswith((".mp4", ".avi", ".mkv")):
+            print(f"Processing {file}...")
+            try:
+                video_path = os.path.join(project_dir, f"data/movies/{file}")
+                cap = cv2.VideoCapture(video_path)
+                if not cap.isOpened():
+                    print(f"Error: The file {file} is not a valid video file or the format is not supported.")
+                    return
+                cap.release()
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                return
+                
+            video_path = os.path.join(project_dir, f"data/movies/{file}")
+            movie_name = '.'.join(file.split('.')[:-1])
+            output_folder = os.path.join(project_dir, f"data/frames/{movie_name}")
 
-# Don't forget to define the extract_frames function here or import it if it's defined in another file
+            if not os.path.exists(output_folder):
+                os.makedirs(output_folder)
+
+            # Extract frames
+            extract_frames(video_path, output_folder, num_parts, frames_per_part)
+
 
 # Run the main function
 if __name__ == "__main__":

@@ -39,7 +39,23 @@ def create_feature_input(movie_name, project_dir, genre_label):
     print(f"Feature vector with label saved to {output_path}")
     print(f"Size of feature vector: {final_feature_vector.shape[0]}")
 
-# Example usage
-script_dir = os.path.dirname(os.path.realpath(__file__))
-project_dir = os.path.abspath(os.path.join(script_dir, '..'))
-create_feature_input('scream', project_dir, 'horror')
+
+
+def main():
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    project_dir = os.path.abspath(os.path.join(script_dir, '..'))
+    
+    # Create feature input for each movie
+    for file in os.listdir(os.path.join(project_dir, 'data', 'movies')):
+        movie_name = '.'.join(file.split('.')[:-1])
+        genre_label = movie_name.split('_')[0]
+        movie_name = movie_name.split('_')[1]
+
+        print(f"Creating feature input for {movie_name}...")
+        create_feature_input(movie_name, project_dir, genre_label)
+
+    print("Feature input creation complete.")
+
+
+if __name__ == '__main__':
+    main()
