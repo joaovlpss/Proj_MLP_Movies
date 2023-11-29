@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import numpy as np
 import matplotlib.pyplot as plt
+import librosa
 
 def open_histogram():
     file_path = filedialog.askopenfilename(title="Open Histogram File", filetypes=[("Numpy Files", "*.npy")])
@@ -48,6 +49,19 @@ def open_haralick():
         plt.title("Haralick Features")
         plt.show()
 
+def open_audio_features():
+    file_path = filedialog.askopenfilename(title="Open Audio Feature File", filetypes=[("Numpy Files", "*.npy")])
+    if file_path:
+        audio_features = np.load(file_path)
+
+        # Plotting the audio features
+        plt.figure(figsize=(10, 4))
+        plt.plot(audio_features)
+        plt.title("Audio Amplitude Envelope")
+        plt.xlabel("Frames")
+        plt.ylabel("Amplitude")
+        plt.show()
+
 root = tk.Tk()
 root.title("Feature Visualization Tool")
 
@@ -56,5 +70,8 @@ btn_open_histogram.pack(pady=10)
 
 btn_open_haralick = tk.Button(root, text="Open Haralick Feature", command=open_haralick)
 btn_open_haralick.pack(pady=10)
+
+btn_open_audio_features = tk.Button(root, text="Open Audio Features", command=open_audio_features)
+btn_open_audio_features.pack(pady=10)
 
 root.mainloop()

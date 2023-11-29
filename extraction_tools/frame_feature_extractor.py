@@ -60,8 +60,5 @@ def main():
             process_movie(x.name)
 
 
-
-
-
 if __name__ == "__main__":
     main()
