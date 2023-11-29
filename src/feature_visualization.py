@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, scrolledtext
 import numpy as np
 import matplotlib.pyplot as plt
 import librosa
@@ -49,18 +49,53 @@ def open_haralick():
         plt.title("Haralick Features")
         plt.show()
 
+def label_features(features, script_number):
+    labeled_features = {}
+    if script_number == 1:
+        # Assuming the first three values are Pareto parameters and the next three are Skewnorm parameters
+        labeled_features['Pareto Params'] = features[:3]
+        labeled_features['Skewnorm Params'] = features[3:6]
+    elif script_number == 2:
+        # The first value is the Band Energy Ratio and the next three are Skew Params
+        labeled_features['Band Energy Ratio'] = features[0]
+        labeled_features['Skew Params'] = features[1:4]
+
+    return labeled_features
+
 def open_audio_features():
     file_path = filedialog.askopenfilename(title="Open Audio Feature File", filetypes=[("Numpy Files", "*.npy")])
     if file_path:
         audio_features = np.load(file_path)
+        # Determine which script the file is from based on the length of the loaded array
+        script_number = 1 if len(audio_features) == 6 else 2
+        labeled_features = label_features(audio_features, script_number)
+        messagebox.showinfo("Audio Features", '\n'.join([f"{key}: {value}" for key, value in labeled_features.items()]))
 
-        # Plotting the audio features
-        plt.figure(figsize=(10, 4))
-        plt.plot(audio_features)
-        plt.title("Audio Amplitude Envelope")
-        plt.xlabel("Frames")
-        plt.ylabel("Amplitude")
+def open_histogram_image():
+    file_path = filedialog.askopenfilename(title="Open Histogram Image", filetypes=[("Image Files", "*.png")])
+    if file_path:
+        img = mpimg.imread(file_path)
+        plt.imshow(img)
+        plt.axis('off')  # No axes for images
         plt.show()
+
+def open_combined_feature_vector():
+    file_path = filedialog.askopenfilename(title="Open Combined Feature Vector", filetypes=[("Numpy Files", "*.npy")])
+    if file_path:
+        combined_features = np.load(file_path)
+
+        # Create a new window to display the feature vector
+        feature_window = tk.Toplevel(root)
+        feature_window.title("Combined Feature Vector")
+
+        # Create a scrolled text widget to display the data
+        text_area = scrolledtext.ScrolledText(feature_window, wrap=tk.WORD, width=40, height=10)
+        text_area.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+        # Convert the numpy array to a string and insert into the text widget
+        feature_text = '\n'.join([f"{i}: {value:.10f}" for i, value in enumerate(combined_features)])
+        text_area.insert(tk.INSERT, feature_text)
+        text_area.config(state=tk.DISABLED)  # Make the text read-only
 
 root = tk.Tk()
 root.title("Feature Visualization Tool")
@@ -73,5 +108,11 @@ btn_open_haralick.pack(pady=10)
 
 btn_open_audio_features = tk.Button(root, text="Open Audio Features", command=open_audio_features)
 btn_open_audio_features.pack(pady=10)
+
+btn_open_histogram_image = tk.Button(root, text="Open Histogram Image", command=open_histogram_image)
+btn_open_histogram_image.pack(pady=10)
+
+btn_open_combined_feature_vector = tk.Button(root, text="Open Combined Feature Vector", command=open_combined_feature_vector)
+btn_open_combined_feature_vector.pack(pady=10)
 
 root.mainloop()

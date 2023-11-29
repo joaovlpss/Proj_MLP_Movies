@@ -30,7 +30,8 @@ def main():
     for file in os.listdir(movies_folder):
         if file.endswith(supported_formats):
             video_path = os.path.join(movies_folder, file)
-            audio_file_name = f"audio_{os.path.splitext(file)[0]}.wav"
+            # Replace the last occurrence of a period in the filename with .wav
+            audio_file_name = '.'.join(file.split('.')[:-1]) + '.wav'
             audio_path = os.path.join(audios_folder, audio_file_name)
 
             extract_audio_from_video(video_path, audio_path)
