@@ -17,61 +17,40 @@ def load_audio(file_path):
         print(f"Error loading {file_path}: {e}")
         return None, None
 
-def approximate_by_distribution(signal, distribution_func, frame_length=1024, hop_length=512):
-    if distribution_func == pareto:
-        feature = amplitude_envelope(signal, frame_length, hop_length)
-    elif distribution_func == skewnorm:
-        feature = zero_crossing_rate(signal, frame_length, hop_length)
-    else:
-        raise ValueError("Unsupported distribution function")
+def calculate_histogram(feature, num_bins=32):
+    hist, _ = np.histogram(feature, bins=num_bins, density=True)
+    return hist.flatten()
 
-    return distribution_func.fit(feature)
-
-def plot_and_save_histogram(signal, distribution_func, file_path, frame_length=1024, hop_length=512, num_bins=50):
-    params = approximate_by_distribution(signal, distribution_func, frame_length, hop_length)
-    feature = amplitude_envelope(signal, frame_length, hop_length) if distribution_func == pareto else zero_crossing_rate(signal, frame_length, hop_length)
-
-    plt.figure(figsize=(10, 4))
-    plt.hist(feature, bins=num_bins, density=True, alpha=0.6, color='g')
-    x = np.linspace(min(feature), max(feature), 1000)
-    plt.plot(x, distribution_func.pdf(x, *params), 'r-', lw=2)
-    plt.xlabel('Feature Value')
-    plt.ylabel('Probability Density')
-    plt.title(f'{"Pareto" if distribution_func == pareto else "Skew Normal"} Distribution')
-    plt.savefig(file_path)
-    plt.close()
-
-def process_audio_files(audio_folder, output_folder):
+def process_audio_files(audio_folder, num_bins=32):
     results = []
     for file in os.listdir(audio_folder):
         if file.endswith('.wav'):
-            # Use os.path.splitext to correctly handle file names with multiple periods
-            file_name_without_extension = os.path.splitext(file)[0]
-
-            # Create a unique directory for each audio file's results
-            file_results_folder = os.path.join(output_folder, file_name_without_extension)
-            if not os.path.exists(file_results_folder):
-                os.makedirs(file_results_folder)
-
+            file_name = os.path.splitext(file)[0]
             file_path = os.path.join(audio_folder, file)
             signal, sr = load_audio(file_path)
 
             if signal is not None:
-                skew_params = approximate_by_distribution(signal, skewnorm)
-                pareto_params = approximate_by_distribution(signal, pareto)
+                frame_length = 1024
+                hop_length = 512
 
-                combined_params = np.hstack([pareto_params, skew_params])
-                results.append((file_name_without_extension, combined_params))
+                # Calculate histograms
+                amp_env = amplitude_envelope(signal, frame_length, hop_length)
+                zcr = zero_crossing_rate(signal, frame_length, hop_length)
 
-                # Update file paths to include the new subdirectories
-                plot_and_save_histogram(signal, skewnorm, os.path.join(file_results_folder, f"{file_name_without_extension}_audio_skew.png"))
-                plot_and_save_histogram(signal, pareto, os.path.join(file_results_folder, f"{file_name_without_extension}_audio_pareto.png"))
+                amp_env_hist = calculate_histogram(amp_env, num_bins)
+                zcr_hist = calculate_histogram(zcr, num_bins)
+
+                combined_features = np.hstack([amp_env_hist, zcr_hist])
+                results.append((file_name, combined_features))
 
     return results
 
 def write_results(results, output_folder):
     for file_name, file_results in results:
-        np.save(os.path.join(output_folder, file_name, f"{file_name}_results.npy"), file_results)
+        if (not os.path.exists(os.path.join(output_folder, f"{file_name}"))):
+            os.makedirs(os.path.join(output_folder, f"{file_name}"))
+        result_file_path = os.path.join(output_folder, f"{file_name}", f"{file_name}_results.npy")
+        np.save(result_file_path, file_results)
 
 def main():
     project_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -81,7 +60,7 @@ def main():
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    results = process_audio_files(audio_folder, output_folder)
+    results = process_audio_files(audio_folder, num_bins=32)
     write_results(results, output_folder)
 
 if __name__ == "__main__":

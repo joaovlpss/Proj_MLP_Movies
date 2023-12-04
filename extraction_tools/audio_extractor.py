@@ -28,7 +28,7 @@ def main():
 
     # Process each video file
     for file in os.listdir(movies_folder):
-        if file.endswith(supported_formats):
+        if (file.endswith(supported_formats)):
             video_path = os.path.join(movies_folder, file)
             # Replace the last occurrence of a period in the filename with .wav
             audio_file_name = '.'.join(file.split('.')[:-1]) + '.wav'

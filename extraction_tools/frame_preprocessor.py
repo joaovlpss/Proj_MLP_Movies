@@ -9,7 +9,7 @@ def preprocess_frame(frame):
     # Resize the frame
     frame = cv2.resize(frame, (256, 256))
 
-    # Color normalization (disabled for now)
+    # Color normalization
     frame = cv2.normalize(frame, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
     # Noise reduction (Gaussian Blur)
@@ -23,6 +23,10 @@ def preprocess_movie_frames(movie_name, input_folder, output_folder):
     """
     input_path = os.path.join(input_folder, movie_name)
     output_path = os.path.join(output_folder, movie_name)
+
+    if os.path.exists(output_path):
+        print(f"Folder {output_path} already found, skipping...")
+        return
 
     # Create output directory if it does not exist
     if not os.path.exists(output_path):
