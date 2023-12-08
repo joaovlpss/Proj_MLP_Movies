@@ -6,28 +6,20 @@ import os
 import pickle
 
 def perform_grid_search(X, y):
-    # Define a parameter grid to search for the best parameters for MLP
     parameter_grid = {
-        'hidden_layer_sizes': [(10,), (50,), (100,), (10, 10), (50, 50), (100, 100)],
+        'hidden_layer_sizes': [(3), (5), (7), (9), (8), (3,5), (5,3), (7,5), (7,7), (9,7), (9,9), (8,8), (3,5,3), (5,3,5), (7,5,7), (7,7,7), (9,7,9), (9,9,9), (8,8,8)],
         'activation': ['tanh', 'relu'],
         'solver': ['sgd', 'adam'],
         'alpha': [0.0001, 0.001, 0.01],
         'learning_rate': ['constant', 'adaptive'],
         'learning_rate_init': [0.001, 0.01],
-        'batch_size': [32, 64],  # Sensible values for your dataset size
-        'max_iter': [2000],  # Increased max_iter for convergence
+        'batch_size': [2, 3, 4, 5],
+        'max_iter': [2000, 2500, 3000],
     }
 
-
     mlp = MLPClassifier(max_iter=1000)
-
-    # Make scorer for accuracy
     scorer = make_scorer(accuracy_score)
-
-    # Perform grid search on the classifier using accuracy as the scoring method
     grid_search = GridSearchCV(estimator=mlp, param_grid=parameter_grid, scoring=scorer, cv=3)
-
-    # Fit the grid search object to the data to compute the optimal model
     grid_search.fit(X, y)
 
     return grid_search.best_params_, grid_search.best_score_

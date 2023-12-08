@@ -15,9 +15,11 @@ def process_frame(frame):
     hist_v = cv2.calcHist([hsv_frame], [2], None, [32], [0, 256])
 
     # Normalize histograms
-    #hist_h = cv2.normalize(hist_h, hist_h).flatten()
-    #hist_s = cv2.normalize(hist_s, hist_s).flatten()
-    #hist_v = cv2.normalize(hist_v, hist_v).flatten()
+    hist_h = cv2.normalize(hist_h, hist_h).flatten()
+    hist_s = cv2.normalize(hist_s, hist_s).flatten()
+    hist_v = cv2.normalize(hist_v, hist_v).flatten()
+
+    # Turn histograms into 1D arrays
     hist_h = hist_h.flatten()
     hist_s = hist_s.flatten()
     hist_v = hist_v.flatten()

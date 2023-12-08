@@ -1,40 +1,30 @@
-# MLP Movie Genre Classifier Project
+# Projeto Classificador de Gênero de Filmes MLP
 
-## Overview
-This project aims to develop a machine learning classifier capable of categorizing movies into genres based on their visual content. It leverages the power of Multi-Layer Perceptrons (MLPs) to analyze and classify movies by extracting and analyzing frame features.
+## Visão Geral
+Este projeto tem como objetivo desenvolver um classificador de aprendizado de máquina capaz de categorizar filmes em gêneros com base em seu conteúdo visual. Ele utiliza o poder dos Perceptrons de Múltiplas Camadas (MLPs) para analisar e classificar filmes, extraindo e analisando características de quadros.
 
-## Project Structure
+## Estrutura do Projeto
 
-### Directories
-- `data/`: Contains movies and frames.
-  - `frames/`: Extracted frames for each movie, organized by movie names.
-  - `movies/`: Movie files in formats like .mkv, .mp4, etc.
-- `extraction_tools/`: Scripts for frame extraction and preprocessing.
-- `models/`: Contains the MLP model training scripts and related utilities.
-- `outputs/`: Storage for trained models and outputs.
-- `src/`: Source code for the project.
+### Diretórios
+- `data/`: Contém filmes e quadros.
+  - `frames/`: Quadros extraídos para cada filme, organizados por nome de filme.
+  - `movies/`: Arquivos de filmes em formatos como .mkv, .mp4, etc.
+- `extraction_tools/`: Scripts para extração e pré-processamento de quadros.
+- `models/`: Contém scripts de treinamento do modelo MLP e utilitários relacionados.
+- `outputs/`: Armazenamento para modelos treinados e saídas.
+- `src/`: Código-fonte do projeto.
 
-## Key Components
+## Instruções de Uso
 
-### Extraction Tools
-1. **Frame Extractor (`frame_extractor.py`)**: Divides movies into equal parts, extracts frames for diverse analysis.
-2. **Frame Preprocessor (`frame_preprocessor.py`)**: Standardizes frames by resizing, normalizing, and reducing noise.
-
-### Model Preparation
-- **Feature Input Creator (`feature_input_creator.py`)**: Aggregates features into a consistent format for the MLP model.
-
-### Visualization Tools
-- **Feature Visualization (`feature_visualization.py`)**: GUI for selecting and displaying histograms and feature data.
-
-## Usage Instructions
-
-1. Place movies in `data/movies/`.
-2. Run `frame_extractor.py` to extract frames.
-3. Use `frame_preprocessor.py` to preprocess frames.
-4. Aggregate features using `feature_input_creator.py`.
-5. Visualize features with `feature_visualization.py`.
-
-## Upcoming Features
-- Enhanced model training scripts.
-- Advanced visualization tools for frame features and model performance.
-- Audio feature extraction and preprocessing.
+1. Coloque os filmes em `data/movies/`.
+2. Execute `frame_extractor.py` para extrair quadros.
+3. Use `frame_preprocessor.py` para pré-processar os quadros.
+4. Use `audio_extractor.py` para extrair os audios dos filmes.
+5. Use `audio_features_refactor.py` para extrair features de audio.
+6. Use `frequency_features_refactor.py` para extrair features de frequencia.
+7. Use `frame_feature_extractor.py` para extrair features de video
+8. Agregue características usando `feature_input_creator.py`.
+9. Finalize a criacao do dataset com `csv_creator.npy`
+10. Treine o MLP com `MLP_trainer.py`
+11. Teste hiperparametros com `hyperparameter_optimizer.py`
+12. Visualize características com `feature_visualization.py`.

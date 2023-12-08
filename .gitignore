@@ -9,5 +9,7 @@
 *.jpg
 *.png
 
-# Histograms, Haralick features and final combined features.
+# Histograms, Haralick features, final combined features, saved MLPs and reports.
 *.npy
+*.txt
+*.pkl
