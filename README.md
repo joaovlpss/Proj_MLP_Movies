@@ -16,7 +16,7 @@ Este projeto tem como objetivo desenvolver um classificador de aprendizado de m�
 
 ## Instruções de Uso
 
-1. Coloque os filmes em `data/movies/`.
+1. Coloque os filmes em `data/movies/`. Cada filme deve estar no formato {gênero}_{nome}.{extensão}
 2. Execute `frame_extractor.py` para extrair quadros.
 3. Use `frame_preprocessor.py` para pré-processar os quadros.
 4. Use `audio_extractor.py` para extrair os audios dos filmes.
